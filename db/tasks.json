@@ -28,23 +28,5 @@
     "title": "Do laundry",
     "completed": false,
     "createdAt": "2023-08-22T10:23:18.681Z"
-  },
-  {
-    "id": "vmi0gjpudd9r3iqodrnzk1fg",
-    "title": "Hat",
-    "completed": true,
-    "createdAt": "2023-08-22T12:50:41.659Z"
-  },
-  {
-    "id": "p8fokw8cj7318715jgqzwg71",
-    "title": "Clean your car",
-    "completed": false,
-    "createdAt": "2023-08-22T13:00:20.517Z"
-  },
-  {
-    "id": "fslk4nw81rt696m3099wrwv5",
-    "title": "Changed task name",
-    "completed": false,
-    "createdAt": "2023-08-22T21:22:27.455Z"
   }
 ]

@@ -8,15 +8,15 @@ Scenario: pathMatches('/api/tasks') && methodIs('get')
     * def responseStatus = 200
 
 Scenario: pathMatches('/api/tasks') && methodIs('post')
-    * def response = {"id":"x8rqzu5cnbt1dj35czgm01yn","title":"Smile","completed":false,"createdAt":"2023-08-22T20:43:40.468Z"}
+    * def response = {"id":"x8rqzu5cnbt1dj35czgm01yn","title":"Phone friend","completed":false,"createdAt":"2023-08-22T20:43:40.468Z"}
     * def responseStatus = 201
 
 Scenario: pathMatches('/api/tasks/x8rqzu5cnbt1dj35czgm01yn') && methodIs('put') && bodyPath('$.title') != null
-    * def response = {"id":"x8rqzu5cnbt1dj35czgm01yn","title":"Smile and be happy","completed":false,"createdAt":"2023-08-22T20:43:40.468Z"}
+    * def response = {"id":"x8rqzu5cnbt1dj35czgm01yn","title":"Phone friend edited!","completed":false,"createdAt":"2023-08-22T20:43:40.468Z"}
     * def responseStatus = 200
 
 Scenario: pathMatches('/api/tasks/{id}') && methodIs('put') && bodyPath('$.completed') != 'Scooby'
-    * def response = {"id":"x8rqzu5cnbt1dj35czgm01yn","title":"Smile and be happy","completed":true,"createdAt":"2023-08-22T20:43:40.468Z"}
+    * def response = {"id":"x8rqzu5cnbt1dj35czgm01yn","title":"Phone friend edited!","completed":true,"createdAt":"2023-08-22T20:43:40.468Z"}
     * def responseStatus = 200
 
 Scenario: pathMatches('/api/tasks/x8rqzu5cnbt1dj35czgm01yn') && methodIs('delete') 
