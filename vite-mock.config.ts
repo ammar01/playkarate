@@ -12,7 +12,7 @@ export default defineConfig({
     }
   },
   server: {
-    proxy: { "/api": "http://localhost:3002" },
+    proxy: { "/api": "http://localhost:4000" },
     hmr: {
       host: 'localhost',
     },
