@@ -1,9 +1,7 @@
 import { test } from '@playwright/test';
 import { TodoPage } from './pages/todo.page';
 
-
-test.describe('to do tests', () => {
-
+test.describe('Todo app tests', () => {
   let todoPage: TodoPage;
 
   test.beforeEach(async ({ page, baseURL }) => {
@@ -12,6 +10,7 @@ test.describe('to do tests', () => {
   })
 
   test('Add a new todo on the page @mock @int', async () => {
+    await todoPage.verifyPageHasTodoTitle(); 
     await todoPage.addTask('Phone friend');
     await todoPage.clickAddButton();
     await todoPage.verifyTheTodoListIncludes('Phone friend');
@@ -24,9 +23,7 @@ test.describe('to do tests', () => {
   });
 
   test('Edit a todo on the page and save @mock', async () => {
-    await todoPage.addTask('Phone friend');
-    await todoPage.clickAddButton();
-    await todoPage.verifyTheTodoListIncludes('Phone friend');
+    await todoPage.addMockTask();
     await todoPage.editTodoListItem('Phone friend edited!');
     await todoPage.clickSaveButton();
     await todoPage.verifyTheTodoListIncludes('Phone friend edited!');
@@ -45,9 +42,7 @@ test.describe('to do tests', () => {
   });
 
   test('Mark a todo as done and save @mock', async () => {
-    await todoPage.addTask('Phone friend');
-    await todoPage.clickAddButton();
-    await todoPage.verifyTheTodoListIncludes('Phone friend');
+    await todoPage.addMockTask();
     await todoPage.markTaskComplete();
     await todoPage.clickSaveButton();
     await todoPage.verifyTaskIsChecked();
@@ -61,10 +56,13 @@ test.describe('to do tests', () => {
     await todoPage.verifyCompletedTaskIsStruckThrough();
   });
 
-  test('Delete a todo @mock @int', async () => {
-    await todoPage.addTask('Phone friend');
-    await todoPage.clickAddButton();
-    await todoPage.verifyTheTodoListIncludes('Phone friend');
+  test('Delete a todo @mock', async () => {
+    await todoPage.addMockTask();
+    await todoPage.clickDeleteButton();
+    await todoPage.verifyTaskDoesNotExist();
+  });
+
+  test('Delete a todo @int', async () => {
     await todoPage.clickDeleteButton();
     await todoPage.verifyTaskDoesNotExist();
   });

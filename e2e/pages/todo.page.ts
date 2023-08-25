@@ -81,4 +81,10 @@ export class TodoPage {
     async reloadThePage() {
         await this.page.reload();
     }
+
+    async addMockTask() {
+        await this.newTaskField.fill('.');
+        await this.addButton.click();
+        await expect(this.taskListText).toHaveValue('Phone friend');
+    }
 }
