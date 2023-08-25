@@ -6,13 +6,14 @@
     "dev": "vite",
     "dev-mock": "vite --config vite-mock.config.ts",
     "dev-node": "tsx watch src/server",
+    "api-mocks": "node mock/api-mocks.js",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
-    "test:e2e": "playwright test --grep @int",
-    "test:mock": "ENABLE_PLAYWRIGHT_WEBSERVER=true playwright test --grep @mock",
+    "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --grep @int",
+    "test:mock": "PLAYWRIGHT_BROWSERS_PATH=0 ENABLE_PLAYWRIGHT_WEBSERVER=true playwright test --grep @mock",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
-    "api-mocks": "node mock/api-mocks.js"
+    "install_chromium": "PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install chromium"
   },
   "dependencies": {
     "@karatelabs/karate": "^0.3.1",
