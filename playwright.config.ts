@@ -48,16 +48,16 @@ const config: PlaywrightTestConfig = {
 
   /* Configure projects for major browsers */
   projects: [
-    {
+    /*{
       name: 'Google Chrome',
       use: { ...devices['Desktop Chrome'], channel: 'chrome' }, // or 'chrome-beta'
-    },
-    /*{
+    },*/
+    {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome']
       }
-    }*//*,
+    }/*,
     {
       name: 'firefox',
       use: {
@@ -115,9 +115,9 @@ const config: PlaywrightTestConfig = {
     reuseExistingServer: !process.env.CI
   }*/
 
-  /*webServer: [
+  webServer: process.env.ENABLE_PLAYWRIGHT_WEBSERVER ? [
     {
-      command: 'npm run dev',
+      command: 'npm run dev-mock',
       port: 5173,
       reuseExistingServer: !process.env.CI,
     },
@@ -126,7 +126,7 @@ const config: PlaywrightTestConfig = {
       port: 4000,
       reuseExistingServer: !process.env.CI,
     },
-  ]*/
+  ] : undefined
 }
 
 export default config

@@ -9,7 +9,7 @@
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "test:e2e": "playwright test --grep @int",
-    "test:mock": "playwright test --grep @mock",
+    "test:mock": "ENABLE_PLAYWRIGHT_WEBSERVER=true playwright test --grep @mock",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "api-mocks": "node mock/api-mocks.js"
