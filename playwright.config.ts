@@ -126,6 +126,7 @@ const config: PlaywrightTestConfig = {
       command: 'npm run api-mocks',
       port: 4000,
       reuseExistingServer: !process.env.CI,
+      timeout: 20 * 1000
     },
   ] : undefined
 }
