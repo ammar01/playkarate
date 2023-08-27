@@ -1,77 +1,59 @@
 import { test } from '@playwright/test';
 import { TodoPage } from './pages/todo.page';
+const fs = require('fs');
 
 test.describe('Todo app tests', () => {
   let todoPage: TodoPage;
 
+  test.beforeAll(async () => {
+    fs.copyFile('./db/tasksBackup.json', './db/tasks.json', (err :Error) => {
+      if (err) throw err;
+    });
+  })
+
   test.beforeEach(async ({ page, baseURL }) => {
     todoPage = new TodoPage(page, baseURL as string)
     await todoPage.goto();
-  })
+  });
 
-  test('Add a new todo on the page @int', async () => {
+  test('Page has a title @mock @int', async () => {
     await todoPage.verifyPageHasTodoTitle(); 
+  });
+
+  test('Add a new todo on the page @mock @int', async () => {
     await todoPage.addTask('Phone friend');
     await todoPage.clickAddButton();
     await todoPage.verifyTheTodoListIncludes('Phone friend');
   });
 
-  test('Add a new todo on the page @mock', async () => {
-    await todoPage.verifyPageHasTodoTitle(); 
-    await todoPage.addMockTask();
-    await todoPage.clickAddButton();
-    await todoPage.verifyTheTodoListIncludes('Phone friend');
-  });
-
   test('Edit a todo on the page without saving @int', async () => {
-    await todoPage.editTodoListItem('Phone friend', 'Phone friend edited!');
+    await todoPage.editTodoListItem('Do laundry', 'Say hello');
     await todoPage.reloadThePage();
-    await todoPage.verifyTheTodoListIncludes('Phone friend');
+    await todoPage.verifyTheTodoListIncludes('Do laundry');
 
   });
 
-  test('Edit a todo on the page and save @mock', async () => {
-    await todoPage.addMockTask();
-    await todoPage.editTodoListItem('Phone friend', 'Phone friend edited!');
-    await todoPage.clickSaveButton();
-    await todoPage.verifyTheTodoListIncludes('Phone friend edited!');
-  });
-
-  test('Edit a todo on the page and save @int', async () => {
-    await todoPage.editTodoListItem('Phone friend', 'Phone friend edited!');
-    await todoPage.clickSaveButton();
-    await todoPage.verifyTheTodoListIncludes('Phone friend edited!');
+  test('Edit a todo on the page and save @mock @int', async () => {
+    await todoPage.editTodoListItem('Do laundry', 'Say hello');
+    await todoPage.clickSaveButton('Say hello');
+    await todoPage.verifyTheTodoListIncludes('Say hello');
   });
 
   test('Mark a todo as done without saving @int', async () => {
-    await todoPage.markTaskComplete('Phone friend edited!');
+    await todoPage.markTaskComplete('Pay bills');
     await todoPage.reloadThePage();
-    await todoPage.verifyTaskIsNotChecked('Phone friend edited!');
+    await todoPage.verifyTaskIsNotChecked('Pay bills');
   });
 
-  test('Mark a todo as done and save @mock', async () => {
-    await todoPage.addMockTask();
-    await todoPage.markTaskComplete('Phone friend');
-    await todoPage.clickSaveButton();
-    await todoPage.verifyTaskIsChecked('Phone friend');
-    await todoPage.verifyCompletedTaskIsStruckThrough();
+  test('Mark a todo as done and save @mock @int', async () => {
+    await todoPage.markTaskComplete('Pay bills');
+    await todoPage.clickSaveButton('Pay bills');
+    await todoPage.verifyTaskIsChecked('Pay bills');
+    await todoPage.verifyCompletedTaskIsStruckThrough('Pay bills');
   });
 
-  test('Mark a todo as done and save @int', async () => {
-    await todoPage.markTaskComplete('Phone friend edited!');
-    await todoPage.clickSaveButton();
-    await todoPage.verifyTaskIsChecked('Phone friend edited!');
-    await todoPage.verifyCompletedTaskIsStruckThrough();
-  });
-
-  test('Delete a todo @mock', async () => {
-    await todoPage.addMockTask();
-    await todoPage.clickDeleteButton('Phone friend');
-    await todoPage.verifyTaskDoesNotExist('Phone friend');
-  });
-
-  test('Delete a todo @int', async () => {
-    await todoPage.clickDeleteButton('Phone friend edited!');
-    await todoPage.verifyTaskDoesNotExist('Phone friend edited!');
+  test('Delete a todo @mock @int', async () => {
+    await todoPage.clickDeleteButton('Clean car');
+    await todoPage.verifyTaskDoesNotExist('Clean car');
   });
 });

@@ -37,6 +37,10 @@ export class TodoPage {
         await this.newTaskField.fill(taskName);
     }
 
+    async addMockTask() {
+        await this.newTaskField.fill('.');
+    }
+
     async clickAddButton() {
         await this.addButton.click();
         await this.page.waitForLoadState('domcontentloaded');
@@ -62,13 +66,18 @@ export class TodoPage {
         throw new Error('Task ' + oldTaskName + ' could not be found in the list');
     }
 
-    async clickSaveButton() {
-        await this.saveButton.click();
-        await this.page.waitForLoadState('domcontentloaded');
+    async clickSaveButton(taskName :string) {
+        for (let task of (await this.page.locator('main > div').all()).values()) {
+            if (await task.locator('input:nth-child(2)').inputValue() == taskName) {
+                await task.locator('button:text("Save")').click();
+                await this.page.waitForLoadState('domcontentloaded');
+                return;
+            }
+        }
+        throw new Error('Save button error: Task ' + taskName + ' could not be found in the list');
     }
 
     async markTaskComplete(taskName: string) {
-        //await this.taskCompleteCheckbox.check();
         for (let task of (await this.page.locator('main > div').all()).values()) {
             if (await task.locator('input:nth-child(2)').inputValue() == taskName) {
                 await task.locator('input:nth-child(1)').check();
@@ -79,7 +88,6 @@ export class TodoPage {
     }
 
     async verifyTaskIsChecked(taskName: string) {
-        // await expect(this.taskCompleteCheckbox).toBeChecked();
         for (let task of (await this.page.locator('main > div').all()).values()) {
             if (await task.locator('input:nth-child(2)').inputValue() == taskName) {
                 await expect(task.locator('input:nth-child(1)')).toBeChecked();
@@ -90,7 +98,6 @@ export class TodoPage {
     }
 
     async verifyTaskIsNotChecked(taskName: string) {
-        //expect(await this.taskCompleteCheckbox.isChecked()).toBeFalsy();
         for (let task of (await this.page.locator('main > div').all()).values()) {
             if (await task.locator('input:nth-child(2)').inputValue() == taskName) {
                 expect(await task.locator('input:nth-child(1)').isChecked()).toBeFalsy();
@@ -100,17 +107,22 @@ export class TodoPage {
         throw new Error('Verify unchecked: unable to find task ' + taskName + ' as it is not in the list');
     }
 
-    async verifyCompletedTaskIsStruckThrough() {
-        await expect(this.taskListText).toHaveCSS('text-decoration', /line-through/);
+    async verifyCompletedTaskIsStruckThrough(taskName :string) {
+        for (let task of (await this.page.locator('main > div > input:nth-child(2)').all()).values()) {
+            if (await task.inputValue() == taskName) {
+                await expect(task).toHaveCSS('text-decoration', /line-through/);
+                return;
+            }
+        }
+        throw new Error('Task ' + taskName + ' was missing strike-through css styling');
     }
 
     async clickDeleteButton(taskName: string) {
-        // await this.deleteButton.click();
         for (let task of (await this.page.locator('main > div').all()).values()) {
             if (await task.locator('input:nth-child(2)').inputValue() == taskName) {
                 await task.locator('button:text("Delete")').click();
                 await this.page.waitForLoadState('domcontentloaded');
-                await expect(task.locator('button:text("Delete")')).not.toBeVisible();
+                await this.page.waitForLoadState('networkidle');
                 return;
             }
         }
@@ -118,22 +130,16 @@ export class TodoPage {
     }
 
     async verifyTaskDoesNotExist(taskName: string) {
-        //await expect(this.taskListItem).not.toBeVisible();
         for (let task of (await this.page.locator('main > div').all()).values()) {
             if (await task.locator('input:nth-child(2)').inputValue() == taskName) {
-                throw new Error('Task ' + taskName + ' could not be found in the list');
+                await this.page.waitForLoadState('domcontentloaded');
+                await this.page.waitForLoadState('networkidle');
+                throw new Error('Delete: Task ' + taskName + ' was found in the list');
             }
         }
     }
 
     async reloadThePage() {
         await this.page.reload();
-    }
-
-    async addMockTask() {
-        await this.newTaskField.fill('.');
-        await this.addButton.click();
-        await this.page.waitForLoadState('domcontentloaded');
-        await expect(this.taskListText).toHaveValue('Phone friend');
     }
 }
