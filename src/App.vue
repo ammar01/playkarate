@@ -1,23 +1,30 @@
 // src/App.vue
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { remult } from "remult";
 import { Task } from "./shared/Task";
+import { TasksController } from "./shared/TasksController";
 
 const taskRepo = remult.repo(Task);
 const tasks = ref<Task[]>([]);
-onMounted(() => taskRepo.find({
-  limit: 20,
-  orderBy: { createdAt: "asc" },
-  //where: { completed: true }
-}).then((items) => (tasks.value = items)));
+onMounted(() =>
+  onUnmounted(
+    taskRepo
+      .liveQuery({
+        limit: 20,
+        orderBy: { createdAt: "asc" }
+        //where: { completed: true },
+      })
+      .subscribe(info => (tasks.value = info.applyChanges(tasks.value)))
+  )
+)
 
 const newTaskTitle = ref("")
 async function addTask() {
   try {
     const newTask = await taskRepo.insert({ title: newTaskTitle.value })
-    tasks.value.push(newTask)
+    //tasks.value.push(newTask)
     newTaskTitle.value = ""
   } catch (error) {
     alert((error as { message: string }).message)
@@ -35,17 +42,24 @@ async function saveTask(task: Task) {
 async function deleteTask(task: Task) {
   try {
     await taskRepo.delete(task)
-    tasks.value = tasks.value.filter(t => task !== t)
+    //tasks.value = tasks.value.filter(t => task !== t)
   } catch (error) {
     alert((error as { message: string }).message)
   }
+}
+
+async function setAllCompleted(completed: boolean) {
+  /*for (const task of await taskRepo.find()) {
+    await taskRepo.save({ ...task, completed })
+  }*/
+  await TasksController.setAllCompleted(completed)
 }
 </script>
 <template>
   <div>
     <h1>todos</h1>
     <main>
-      <form @submit.prevent="addTask()">
+      <form v-if="taskRepo.metadata.apiInsertAllowed()" @submit.prevent="addTask()">
         <input v-model="newTaskTitle" placeholder="What needs to be done?" />
         <button>Add</button>
       </form>
@@ -54,7 +68,11 @@ async function deleteTask(task: Task) {
         <input type="checkbox" v-model="task.completed" />
         <input v-model="task.title" />
         <button @click="saveTask(task)">Save</button>
-        <button @click="deleteTask(task)">Delete</button>
+        <button v-if="taskRepo.metadata.apiDeleteAllowed(task)" @click="deleteTask(task)">Delete</button>
+      </div>
+      <div>
+        <button @click="setAllCompleted(true)">Set All as Completed</button>
+        <button @click="setAllCompleted(false)">Set All as Uncompleted</button>
       </div>
     </main>
   </div>
