@@ -1,13 +1,15 @@
 # Playkarate Hybrid Test Tool (Work In Progress)
 
 ## Introduction
-* This repo is intended to demonstrate the power of combining two test tools: Playwright and Karate API. 
-* Playwright is a test tool that allows the development and execution of automated functional front-end application tests.
-* Karate API is a test tool that allows the development and execution of automated API tests both real and mocked. 
-* Combining the tools allows the development of tests for an applicaton under development using mock APIs that can later be switched to use the real API calls once they have been developed. 
+* This repository is intended to demonstrate the power of combining two test tools: Playwright and Karate API
+* Playwright is an automation test tool from Microsoft that can be used to develop and execute functional front-end application tests.
+* Karate API is an automation test tool from Karate Labs that allows the development and execution of automated API tests - both real APIs and mocked. 
+* Combining the tools together means you can easily create mock APIs and then develop functional tests to use those mock APIs early in the development process. Once the real APIs have been created you can reconfigure those functional tests to use them with a small amount of work. 
+* The application being used to demonstrate the test tool is a simple To Do List web site with a separate front-end and api back-end.
 * These tests can also be used for rapid front-end validation using mocks to perform sanity tests in situations that require quick feedback - such as within a CI/CD build pipeline.   
 
-**Please note:** This is a work in progress, and there are some areas that need to be improved such as selecting a more feature-rich application to demonstrate the uses, a more detailed README
+**Please note:** 
+This is a work in progress, and there are some areas that need to be improved such as selecting a more feature-rich application to demonstrate the uses, a more detailed README
 
 
 ## Recommended IDE
@@ -19,7 +21,6 @@ npm install
 ```
 
 ### Install Chromium For Playwright
-
 * By default, browser installation would place the browser in your user profile folder. Here we override that to install it in the /node_modules/core-playwright folder/.local-browsers folder
 * This can make running these tests on a CI/CD server more convenient
 
