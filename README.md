@@ -1,6 +1,6 @@
-# Playwright/Karate Hybrid Test Tool (Work In Progress)
+# Playkarate Hybrid Test Tool (Work In Progress)
 
-* This repo is intended to demonstrate the power of combining Playwright with Karate API. 
+* This repo is intended to demonstrate the power of combining two test tools: Playwright and Karate API. 
 * Playwright is a test tool that allows the development and execution of automated functional front-end application tests.
 * Karate API is a test tool that allows the development and execution of automated API tests both real and mocked. 
 * Combining the tools allows the development of tests for an applicaton under development using mock APIs that can later be switched to use the real API calls once they have been developed. 
