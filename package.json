@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "vite",
     "dev-mock": "vite --config vite-mock.config.ts",
-    "dev-node": "tsx watch src/server",
-    "api-mocks": "node mock/api-mocks.js",
+    "api": "tsx watch src/server",
+    "api-mock": "node mock/api-mocks.js",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --grep @int",
